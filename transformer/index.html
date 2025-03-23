@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lecture 1 Slides</title>
+  <link rel="stylesheet" href="../reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="../reveal.js/dist/theme/black.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section data-markdown="slides.md"
+               data-separator="^---$"
+               data-separator-vertical="^--$">
+      </section>
+    </div>
+  </div>
+
+  <script src="../reveal.js/dist/reveal.js"></script>
+  <script src="../reveal.js/plugin/markdown/markdown.js"></script>
+  <script>
+    Reveal.initialize({
+      plugins: [ RevealMarkdown ],
+      markdown: {
+        separator: '^---$',
+        separatorVertical: '^--$'
+      }
+    });
+  </script>
+</body>
+</html>
