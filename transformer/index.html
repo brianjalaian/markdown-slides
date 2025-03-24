@@ -5,6 +5,8 @@
     <title>Transformers: Improving NLP with Attention Mechanisms</title>
     <link rel="stylesheet" href="../reveal.js/dist/reveal.css">
     <link rel="stylesheet" href="../reveal.js/dist/theme/black.css">
+    <!-- Add highlight.js theme -->
+    <link rel="stylesheet" href="../reveal.js/plugin/highlight/monokai.css">
     
     <!-- MathJax Configuration -->
     <script>
@@ -28,20 +30,32 @@
         <div class="slides">
             <section data-markdown="slides.md"
                      data-separator="^---$"
-                     data-separator-vertical="^--$">
+                     data-separator-vertical="^--$"
+                     data-charset="utf-8">
+                <script type="text/template">
+                    <!-- Slides content will be inserted here -->
+                </script>
             </section>
         </div>
     </div>
 
     <script src="../reveal.js/dist/reveal.js"></script>
     <script src="../reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="../reveal.js/plugin/highlight/highlight.js"></script>
     <script src="../reveal.js/plugin/math/math.js"></script>
     <script>
         Reveal.initialize({
-            plugins: [ RevealMarkdown, RevealMath.MathJax3 ],
+            plugins: [ RevealMarkdown, RevealHighlight, RevealMath.MathJax3 ],
             markdown: {
                 separator: '^---$',
-                separatorVertical: '^--$'
+                separatorVertical: '^--$',
+                highlightLines: true
+            },
+            highlight: {
+                // Highlight.js theme to use
+                theme: 'monokai',
+                // Display line numbers
+                numberLines: true
             }
         });
     </script>
