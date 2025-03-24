@@ -1,162 +1,88 @@
-# Introduction to Transformers
+# Transformers: Improving NLP with Attention Mechanisms
+### CAP6606: Machine Learning for ISR
+#### Dr. Brian Jalaian
 
-- Transformers revolutionized NLP by using **attention mechanisms**.
-- Unlike RNNs, Transformers handle **long-range dependencies** efficiently.
-- Key advantage: Parallelization through **self-attention**.
-- Transformer models like **BERT**, **GPT**, and **T5** have set new benchmarks.
-
----
-
-# Why Transformers?
-
-- Limitations of RNNs and LSTMs:
-  - Sequential processing limits parallelism.
-  - Struggles with long-range dependencies.
-- Self-attention addresses these challenges by:
-  - Allowing **direct connections** between any pair of words.
-  - Enabling parallel processing.
-- **Attention is All You Need** (Vaswani et al., 2017) introduced the Transformer.
+<div style="text-align: right"><font size="4">1</font></div>
 
 ---
+### Lecture Overview
+- Introduction to Transformers
+- Attention Mechanisms in RNNs
+- Self-Attention and Scaled Dot-Product Attention
+- Transformer Architecture: Encoder-Decoder Structure
+- Pre-training and Fine-Tuning with Large Models
+- Fine-Tuning BERT in PyTorch
 
-# Attention Mechanism
-
-- Attention allows the model to focus on **relevant parts** of the input.
-- Computes a weighted sum of **values**, using a similarity score.
-- Three key components:
-  - Query (Q)
-  - Key (K)
-  - Value (V)
-
-**Equation:**
-
-$$
-\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V
-$$
+<div style="text-align: right"><font size="4">2</font></div>
 
 ---
+### Challenges & Solutions
 
-# Self-Attention Mechanism
+| Challenges with Traditional Models | Solutions |
+|----------------------------------|-----------|
+| RNNs/LSTMs struggle with long dependencies | Attention mechanisms |
+| Performance degrades with sequence length | Parallel processing |
+| Sequential processing limits speed | Direct connections |
 
-- Each word attends to every other word in the sentence.
-- Captures **relationships** regardless of their distance.
-
-**Self-Attention Calculation:**
-
-1. Compute **Query**, **Key**, and **Value** matrices.
-2. Calculate attention scores as a dot product.
-3. Apply **softmax** to obtain weights.
-4. Aggregate weighted sum.
-
-**Code Example:**
-
-```python
-import torch
-import torch.nn.functional as F
-
-def scaled_dot_product_attention(Q, K, V):
-    d_k = Q.size(-1)
-    scores = torch.matmul(Q, K.transpose(-2, -1)) / torch.sqrt(torch.tensor(d_k, dtype=torch.float32))
-    attention_weights = F.softmax(scores, dim=-1)
-    return torch.matmul(attention_weights, V)
-```
+<div style="text-align: right"><font size="4">3</font></div>
 
 ---
+### Key Innovations in Transformers
 
-# Multi-Head Attention
+- **Architecture:** Replace RNN with self-attention mechanism
+- **Modeling:** Direct modeling of all relationships in sequence
+- **Benefits:**
+  - Parallel training & computation
+  - Better handling of long sequences
+  - Improved model scalability
 
-- Multiple attention heads allow learning of different representations.
-- Instead of a single **self-attention**, **multi-head attention** has:
-  - Multiple sets of Q, K, V.
-  - Outputs concatenated and linearly transformed.
+<div style="text-align: right"><font size="4">4</font></div>
+---
+### The Rise of Attention Mechanisms
+- Attention mechanisms originally introduced to improve RNNs.
+- Key idea: Focus on important parts of input rather than processing entire sequences.
+- Allows dynamic weighting of inputs based on relevance.
+- Major breakthrough: Transformer architecture (Vaswani et al., 2017).
+- "Attention is All You Need" paper introduced self-attention to replace RNNs.
 
-**Equation:**
+<div style="text-align: right"><font size="4">5</font></div>
+---
+### Adding Attention to RNNs
+- Challenge: RNNs suffer from long-range dependencies.
+- Solution: Introduce an attention mechanism to access relevant parts of the input.
+- The model learns to generate context vectors using attention weights.
+- Example: Machine translation and text summarization.
 
-$$
-\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h)W^O
-$$
+<div style="text-align: right"><font size="4">6</font></div>
+---
+# How Attention Works in RNNs
+- Compute context vector for each output token.
+- Context vector is a weighted sum of encoder hidden states.
+- Weights are computed using:
+  - Dot product between current hidden state and encoder states.
+  - Softmax function to normalize weights.
 
+<div style="text-align: right"><font size="4">7</font></div>
+---
+### How Attention Works in RNNs
+- Compute context vector for each output token.
+- Context vector is a weighted sum of encoder hidden states.
+- Weights are computed using:
+  - Dot product between current hidden state and encoder states.
+  - Softmax function to normalize weights.
+
+<div style="text-align: right"><font size="4">8</font></div>
+---
+# Attention Weight Computation
+Given encoder hidden states (h₁, h₂, ..., hₙ) and decoder hidden state (d),
+attention weights are computed as:
+
+$\alpha_i = \frac{\exp(d \cdot h_i)}{\sum_{j=1}^{n} \exp(d \cdot h_j)}$
+
+Context vector:
+
+$c = \sum_{i=1}^{n} \alpha_i \cdot h_i$
+
+<div style="text-align: right"><font size="4">9</font></div>
 ---
 
-# Positional Encoding
-
-- Transformers lack an **intrinsic notion of order**.
-- Positional encodings inject order information.
-- Use sine and cosine functions of different frequencies.
-
-**Equation:**
-
-$$
-PE_{(pos, 2i)} = \sin \left(\frac{pos}{10000^{2i/d_{model}}}\right)
-$$
-
-$$
-PE_{(pos, 2i+1)} = \cos \left(\frac{pos}{10000^{2i/d_{model}}}\right)
-$$
-
----
-
-# Transformer Architecture
-
-| Component          | Description                                      |
-| ----------------- | ------------------------------------------------ |
-| Encoder            | Encodes the input sequence                      |
-| Decoder            | Generates the output sequence                   |
-| Multi-Head Attention | Captures multiple aspects of relationships     |
-| Feed-Forward Network | Applies non-linearity                          |
-| Positional Encoding | Adds positional information to embeddings       |
-
----
-
-# Pre-training and Fine-Tuning
-
-- Pre-training on massive text corpora to learn representations.
-- Fine-tuning on specific tasks for adaptation.
-- Examples:
-  - **BERT**: Bidirectional representation
-  - **GPT**: Unidirectional generation
-
----
-
-# Code Implementation of Transformer Block
-
-```python
-import torch.nn as nn
-
-class TransformerBlock(nn.Module):
-    def __init__(self, d_model, nhead):
-        super(TransformerBlock, self).__init__()
-        self.attention = nn.MultiheadAttention(d_model, nhead)
-        self.ffn = nn.Sequential(
-            nn.Linear(d_model, 2048),
-            nn.ReLU(),
-            nn.Linear(2048, d_model)
-        )
-        self.norm1 = nn.LayerNorm(d_model)
-        self.norm2 = nn.LayerNorm(d_model)
-
-    def forward(self, x):
-        attn_output, _ = self.attention(x, x, x)
-        x = self.norm1(x + attn_output)
-        ffn_output = self.ffn(x)
-        x = self.norm2(x + ffn_output)
-        return x
-```
-
----
-
-# Hands-On Coding Session
-
-- Try implementing a **Transformer Encoder Block** using PyTorch.
-- Experiment with different numbers of heads and embedding dimensions.
-- Discuss your observations with your peers.
-
----
-
-# Q&A and Wrap-Up
-
-- Open floor for questions.
-- Key takeaways:
-  - Transformers are powerful for NLP tasks.
-  - Attention mechanisms enhance performance.
-  - Pre-training and fine-tuning are essential for SOTA models.
