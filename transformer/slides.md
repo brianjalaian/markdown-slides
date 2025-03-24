@@ -85,19 +85,17 @@ $c = \sum_{i=1}^{n} \alpha_i \cdot h_i$
 <div style="text-align: right"><font size="4">10</font></div>
 ---
 ### Self-Attention Mechanism
-- Computes attention weights between every pair of words.
-- Weights are determined by the relationship between words.
-### Numerical Example
-Given three words: "I", "like", "pizza":
-- Attention scores:
-  - I → like: 0.2
-  - I → pizza: 0.1
-  - like → I: 0.3
-  - like → pizza: 0.4
-  - pizza → I: 0.1
-  - pizza → like: 0.5
 
-Context vectors are calculated as a weighted sum of input embeddings.
+| From\To | I | like | pizza |
+|:----:|:----:|:----:|:----:|
+| **I** | 0.7 | 0.2 | 0.1 |
+| **like** | 0.3 | 0.3 | 0.4 |
+| **pizza** | 0.1 | 0.5 | 0.4 |
+
+**Key Points:**
+- Each row: how one word attends to all others
+- Row weights sum to 1.0 (probability distribution)
+- Higher values = stronger relationships
 
 <div style="text-align: right"><font size="4">11</font></div>
 ---
@@ -150,7 +148,7 @@ print("Attention Weights:", weights)
 
 **Takeaway:** Transformers outperform RNNs in both efficiency and accuracy.
 ---
-# Multi-Head Self-Attention
+### Multi-Head Self-Attention
 - Breaks the input into multiple heads for parallel processing.
 - Each head learns different aspects of word interactions.
 - Improves model's capacity to focus on different semantic relations.
@@ -158,28 +156,24 @@ print("Attention Weights:", weights)
 ### Visualization
 (Insert Figure: Multi-Head Attention Architecture)
 ---
-# How Multi-Head Attention Works
+### How Multi-Head Attention Works
 1. Split the input into multiple attention heads.
 2. Perform self-attention independently on each head.
 3. Concatenate the outputs and project to the final dimensions.
 
 **Mathematical Formulation:**
-\[
-\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O
-\]
+
+$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O$
 
 - Each head:
-\[
-\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
-\]
+$\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$
 ---
-# Self-Attention Numerical Example
-### Example
+### Self-Attention Numerical Example
+
 Suppose Q, K, V matrices are as follows:
 Q = [[1, 0], [0, 1]]
 K = [[1, 0], [0, 1]]
 V = [[1, 2], [3, 4]]
-
 ### Calculation
 1. Dot product: Q * K^T
 2. Apply scaling and softmax.

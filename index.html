@@ -28,6 +28,38 @@
         .slides-list a:hover {
             text-decoration: underline;
         }
+        /* Improve heading colors */
+        .reveal h1 { color: #8be9fd; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        .reveal h2 { color: #bd93f9; }
+        .reveal h3 { color: #50fa7b; }
+        
+        /* Better emphasis */
+        .reveal strong { color: #ffb86c; }
+        .reveal em { color: #f1fa8c; font-style: italic; }
+        
+        /* Table improvements */
+        .reveal table thead tr,
+        .reveal table th { background-color: #44475a; }
+        .reveal table th { color: #ff79c6; }
+        
+        /* Highlight key points */
+        .reveal .key-points { 
+            border-left: 3px solid #ff79c6; 
+            padding-left: 10px;
+            margin-left: 10px;
+        }
+        
+        /* Code blocks */
+        .reveal pre { background-color: #282a36; }
+        .reveal code { color: #f8f8f2; }
+        
+        /* Section dividers */
+        .reveal hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #bd93f9, transparent);
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -35,5 +67,29 @@
     <ul class="slides-list">
         <li><a href="transformer/">Transformers: Improving NLP with Attention Mechanisms</a></li>
     </ul>
+    <hr class="divider">
+    
+    <div style="display:flex; justify-content:space-between;">
+    <div style="width:48%;">
+    
+    **Left Content**
+    - Point 1
+    - Point 2
+    
+    </div>
+    <div style="width:48%;">
+    
+    **Right Content**
+    - Point A
+    - Point B
+    
+    </div>
+    </div>
+    
+    <div style="background-color:#44475a; padding:10px; border-radius:5px;">
+    
+    **Note:** Important information highlighted in a box
+    
+    </div>
 </body>
 </html>
