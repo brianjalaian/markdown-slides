@@ -19,10 +19,10 @@
 ### Challenges & Solutions
 
 | Challenges with Traditional Models | Solutions |
-|----------------------------------|-----------|
-| RNNs/LSTMs struggle with long dependencies | Attention mechanisms |
-| Performance degrades with sequence length | Parallel processing |
-| Sequential processing limits speed | Direct connections |
+|:--------------------------------:|:----------:|
+| **RNNs/LSTMs** struggle with long dependencies | **Attention** mechanisms |
+| Performance degrades with sequence length | **Parallel** processing |
+| Sequential processing limits speed | **Direct** connections |
 
 <div style="text-align: right"><font size="4">3</font></div>
 

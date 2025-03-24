@@ -8,6 +8,55 @@
     <!-- Add highlight.js theme -->
     <link rel="stylesheet" href="../reveal.js/plugin/highlight/monokai.css">
     
+    <!-- Custom Styles -->
+    <style>
+        .reveal table {
+            margin: 1em auto;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .reveal table thead tr,
+        .reveal table th {
+            background-color: #305090;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .reveal table th,
+        .reveal table td {
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .reveal table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .reveal table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .reveal table tbody tr:last-of-type {
+            border-bottom: 2px solid #305090;
+        }
+
+        /* Improve code block appearance */
+        .reveal pre {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            border-radius: 5px;
+        }
+
+        /* Improve math rendering */
+        .reveal .math {
+            text-shadow: none;
+        }
+    </style>
+    
     <!-- MathJax Configuration -->
     <script>
         MathJax = {
@@ -52,9 +101,7 @@
                 highlightLines: true
             },
             highlight: {
-                // Highlight.js theme to use
                 theme: 'monokai',
-                // Display line numbers
                 numberLines: true
             }
         });
