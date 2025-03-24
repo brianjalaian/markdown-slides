@@ -62,7 +62,7 @@
   - Dot product between current hidden state and encoder states.
   - Softmax function to normalize weights.
 
-<div style="text-align: right"><font size="4">8</font></div>
+<div style="text-align: right"><font size="4">7</font></div>
 ---
 ### Attention Weight Computation
 Given encoder hidden states (h₁, h₂, ..., hₙ) and decoder hidden state (d),
@@ -74,7 +74,7 @@ Context vector:
 
 $c = \sum_{i=1}^{n} \alpha_i \cdot h_i$
 
-<div style="text-align: right"><font size="4">9</font></div>
+<div style="text-align: right"><font size="4">8</font></div>
 ---
 ### Why Use Attention Mechanisms?
 - Allows RNNs to handle longer sequences without losing context.
@@ -82,7 +82,7 @@ $c = \sum_{i=1}^{n} \alpha_i \cdot h_i$
 - Reduces model complexity by focusing on important inputs.
 - Paves the way for the development of the Transformer model.
 
-<div style="text-align: right"><font size="4">10</font></div>
+<div style="text-align: right"><font size="4">9</font></div>
 ---
 ### Self-Attention Mechanism
 
@@ -97,7 +97,7 @@ $c = \sum_{i=1}^{n} \alpha_i \cdot h_i$
 - Row weights sum to 1.0 (probability distribution)
 - Higher values = stronger relationships
 
-<div style="text-align: right"><font size="4">11</font></div>
+<div style="text-align: right"><font size="4">10</font></div>
 ---
 ### Key Formula for Self-Attention
 Given query (Q), key (K), and value (V) matrices:
@@ -111,14 +111,11 @@ Where:
 **Why Scaling?**
 - Scaling factor $\sqrt{d_k}$ prevents large dot products.
 
-<div style="text-align: right"><font size="4">12</font></div>
+<div style="text-align: right"><font size="4">11</font></div>
 ---
 ### Self-Attention in Practice
 
 ```python
-import torch
-import torch.nn.functional as F
-
 def self_attention(Q, K, V):
     d_k = Q.size(-1)
     scores = torch.matmul(Q, K.transpose(-2, -1)) / torch.sqrt(torch.tensor(d_k, dtype=torch.float32))
@@ -135,26 +132,39 @@ print("Context:", context)
 print("Attention Weights:", weights)
 ```
 
+<div style="text-align: right"><font size="4">12</font></div>
+---
+### RNNs vs Transformers Comparison
+
+| Aspect | RNNs | Transformers |
+|:-------|:-----|:-------------|
+| Sequences | Sequential processing | Parallel processing |
+| Context | Struggles with long inputs | Efficient with attention |
+| Speed | Slow (recurrence) | Fast (parallelization) |
+| Memory | High for long sequences | Efficient with fixed length |
+
+**Takeaway:** Transformers outperform RNNs in efficiency and accuracy.
+
 <div style="text-align: right"><font size="4">13</font></div>
 ---
-### Comparison of RNNs and Transformers
-
-| Aspect             | RNNs                     | Transformers                |
-|-------------------|----------------------------|-----------------------------|
-| Handling Sequences | Sequential, one at a time  | Parallel processing          |
-| Long-Range Context | Struggles with long inputs | Efficient with attention     |
-| Training Speed     | Slow due to recurrence     | Fast due to parallelization  |
-| Memory Usage       | High for long sequences    | Efficient with fixed length  |
-
-**Takeaway:** Transformers outperform RNNs in both efficiency and accuracy.
----
 ### Multi-Head Self-Attention
+
+<div style="display: flex; align-items: center;">
+<div style="flex: 50%; padding-right: 20px;">
+
 - Breaks the input into multiple heads for parallel processing.
 - Each head learns different aspects of word interactions.
 - Improves model's capacity to focus on different semantic relations.
 
-### Visualization
-(Insert Figure: Multi-Head Attention Architecture)
+</div>
+<div style="flex: 50%;">
+
+![Multi-Head Attention Architecture](figure/original_transformer_architecture.png)
+
+</div>
+</div>
+
+<div style="text-align: right"><font size="4">14</font></div>
 ---
 ### How Multi-Head Attention Works
 1. Split the input into multiple attention heads.
@@ -167,20 +177,26 @@ $\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)
 
 - Each head:
 $\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$
+
+<div style="text-align: right"><font size="4">15</font></div>   
 ---
 ### Self-Attention Numerical Example
+Q = [1 0; 0 1]  
+K = [1 0; 0 1]  
+V = [1 2; 3 4]
 
-Suppose Q, K, V matrices are as follows:
-Q = [[1, 0], [0, 1]]
-K = [[1, 0], [0, 1]]
-V = [[1, 2], [3, 4]]
 ### Calculation
 1. Dot product: Q * K^T
 2. Apply scaling and softmax.
 3. Multiply softmax output by V.
 
 | Q · K^T | Scaling | Softmax  | Context Vector |
-|--------|--------|---------|----------------|
-| 1.0    | 0.707  | 0.62    | 1.86           |
-| 0.0    | 0.707  | 0.38    | 2.14           |
+|:-------:|:-------:|:--------:|:--------------:|
+| 1.0     | 0.707   | 0.62     | 1.86           |
+| 0.0     | 0.707   | 0.38     | 2.14           |
+
+<div style="text-align: right"><font size="4">16</font></div>   
 ---
+
+
+
