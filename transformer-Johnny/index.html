@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Transformers: Improving NLP with Attention Mechanisms</title>
+    <link rel="stylesheet" href="../reveal.js/dist/reveal.css">
+    <!-- Remove the current theme -->
+    <!-- <link rel="stylesheet" href="../reveal.js/dist/theme/black.css"> -->
+    <!-- Custom theme -->
+    <link rel="stylesheet" href="johnny.css">
+    <!-- Add highlight.js theme -->
+    <link rel="stylesheet" href="../reveal.js/plugin/highlight/monokai.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        .reveal table {
+            margin: 0.5em auto;
+            border-collapse: collapse;
+            font-size: 0.8em;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .reveal table thead tr,
+        .reveal table th {
+            background-color: #305090;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .reveal table th,
+        .reveal table td {
+            padding: 8px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            line-height: 1.2;
+        }
+
+        .reveal table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .reveal table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .reveal table tbody tr:last-of-type {
+            border-bottom: 2px solid #305090;
+        }
+
+        /* Improve code block appearance */
+        .reveal pre {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            border-radius: 5px;
+        }
+
+        /* Improve math rendering */
+        .reveal .math {
+            text-shadow: none;
+        }
+
+        /* Improve heading colors */
+        .reveal h1 { color: #8be9fd; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        .reveal h2 { color: #bd93f9; }
+        .reveal h3 { color: #50fa7b; }
+
+        /* Better emphasis */
+        .reveal strong { color: #ffb86c; }
+        .reveal em { color: #f1fa8c; font-style: italic; }
+
+        /* Table improvements */
+        .reveal table thead tr,
+        .reveal table th { background-color: #44475a; }
+        .reveal table th { color: #ff79c6; }
+
+        /* Highlight key points sections */
+        .reveal h4, 
+        .reveal h4 + ul { 
+            border-left: 3px solid #ff79c6; 
+            padding-left: 10px;
+            margin-left: 10px;
+        }
+
+        /* Code blocks */
+        .reveal pre { background-color: #282a36; }
+        .reveal code { color: #f8f8f2; }
+
+        /* Make slide numbers more visible */
+        .reveal .slide-number { 
+            background-color: rgba(0,0,0,0.4);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        /* Reduce space after tables */
+        .reveal table + p {
+            margin-top: 10px;
+        }
+    </style>
+    
+    <!-- MathJax Configuration -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                packages: ['base', 'ams']
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section data-markdown="slides.md"
+                     data-separator="^---$"
+                     data-separator-vertical="^--$"
+                     data-charset="utf-8">
+                <script type="text/template">
+                    <!-- Slides content will be inserted here -->
+                </script>
+            </section>
+        </div>
+    </div>
+
+    <script src="../reveal.js/dist/reveal.js"></script>
+    <script src="../reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="../reveal.js/plugin/highlight/highlight.js"></script>
+    <script src="../reveal.js/plugin/math/math.js"></script>
+    <script>
+        Reveal.initialize({
+            plugins: [ RevealMarkdown, RevealHighlight, RevealMath.MathJax3 ],
+            markdown: {
+                separator: '^---$',
+                separatorVertical: '^--$',
+                highlightLines: true
+            },
+            highlight: {
+                theme: 'monokai',
+                numberLines: true
+            }
+        });
+    </script>
+</body>
+</html>
