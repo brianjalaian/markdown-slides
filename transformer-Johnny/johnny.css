@@ -1,36 +1,40 @@
+/* NOTE: Basic appearance */
 .reveal {
     font-family: 'Times New Roman', serif;
     background-color: white;
     color: black;
 }
 
-.reveal h1, 
-.reveal h2, 
-.reveal h3 {
-    color: black;
-    font-weight: bold;
-}
-
 .reveal h1 {
-    font-size: 30px;
+    font-size: 36px;
+    color: black;
+    text-align: center;
 }
-
-.reveal h2, 
+.reveal h2 {
+    font-size: 32px;
+    color: black;
+    text-align: center;
+}
 .reveal h3 {
+    font-size: 28px;
+    color: black;
+    text-align: center;
+}
+.reveal p, .reveal li {
     font-size: 24px;
+    color: black;
 }
-
-.reveal p,
-.reveal li {
-    font-size: 18px;
+/* Reduce space between paragraphs */
+.reveal p {
+    line-height: 1.6; 
 }
-
+/* Reduce space between list items */
 .reveal ul ul li {
-    font-size: 14px;
+    font-size: 18px;
+    line-height: 1.4; 
 }
 
 .reveal strong {
-    background-color: yellow;
     color: black;
 }
 
@@ -41,6 +45,90 @@
 }
 
 .reveal .slide-number {
-    background-color: rgba(0, 0, 0, 0.1);
     color: black;
+}
+
+/* Align slide content to top-left */
+.reveal .slides section {
+    display: block;
+    text-align: left;
+    padding: 18px;
+}
+
+/* NOTE: Table appearance */
+.reveal table {
+    margin: 0.5em auto;
+    border-collapse: collapse;
+    font-size: 18px;
+    width: 90%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.reveal table thead tr,
+.reveal table th {
+    background-color: #305090;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.reveal table th,
+.reveal table td {
+    padding: 8px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    line-height: 1.2;
+}
+
+.reveal table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.reveal table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.reveal table tbody tr:last-of-type {
+    border-bottom: 2px solid #305090;
+}
+
+/* Reduce space after tables */
+/* .reveal table + p {
+    margin-top: 10px;
+} */
+
+/* NOTE: Code block appearance */
+.reveal pre {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+
+.reveal pre { background-color: #282a36; }
+.reveal code { color: #f8f8f2; }
+
+/* NOTE: Math rendering */
+.reveal .math {
+    text-shadow: none;
+    font-size: 18px;
+}
+
+/* NOTE: Bullet points */
+/* Bullet points left-aligned */
+.reveal ul, .reveal ol {
+    margin-left: 40px;
+}
+
+/* Bullet indentation */
+.reveal ul ul, .reveal ol ol {
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.reveal ul li::marker, .reveal ol li::marker {
+    color: black;
+}
+
+/* Optional: Smaller bullet gap */
+.reveal ul li, .reveal ol li {
+    margin: 10px 0;
 }

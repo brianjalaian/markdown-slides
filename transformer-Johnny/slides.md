@@ -1,32 +1,54 @@
 # Transformers: Improving NLP with Attention Mechanisms
-### CAP6606: Machine Learning for ISR
-#### Dr. Brian Jalaian
 
-<div style="text-align: right"><font size="4">1</font></div>
+## CAP6606: Machine Learning for ISR
+
+### Dr. Brian Jalaian
+
+<div style="text-align: right"><font size="2">1</font></div>
+<div style="text-align: right"><font size="2">2</font></div>
+<div style="text-align: right"><font size="2">3</font></div>
+<div style="text-align: right"><font size="2">4</font></div>
+<div style="text-align: right"><font size="2">5</font></div>
+<div style="text-align: right"><font size="2">6</font></div>
+<div style="text-align: right"><font size="2">7</font></div>
+<div style="text-align: right"><font size="2">8</font></div>
+<div style="text-align: right"><font size="2">9</font></div>
+<div style="text-align: right"><font size="2">10</font></div>
+<div style="text-align: right"><font size="2">11</font></div>
+<div style="text-align: right"><font size="2">12</font></div>
+<div style="text-align: right"><font size="2">13</font></div>
+<div style="text-align: right"><font size="2">14</font></div>
+<div style="text-align: right"><font size="2">15</font></div>  
+<div style="text-align: right"><font size="2">16</font></div>   
 
 ---
-### Lecture Overview
+
+### Table of Content
+
 - Introduction to Transformers
-- Attention Mechanisms in RNNs
-- Self-Attention and Scaled Dot-Product Attention
-- Transformer Architecture: Encoder-Decoder Structure
-- Pre-training and Fine-Tuning with Large Models
-- Fine-Tuning BERT in PyTorch
+- Attention Mechanisms
+- Self-Attention
+- Transformer Architecture
+- Pretraining and Finetuning with Large Models
+- Finetuning BERT in PyTorch (Lecture Code)
 
-<div style="text-align: right"><font size="4">2</font></div>
+<!-- NOTE: Intro -->
+---
+
+## Introduction to Transformers
 
 ---
-### Challenges & Solutions
 
-| Challenges with Traditional Models | Solutions |
+### Challenges & Solutions with Traditional Sequencial Models
+
+| Challenges | Solutions |
 |:--------------------------------:|:----------:|
-| **RNNs/LSTMs** struggle with long dependencies | **Attention** mechanisms |
-| Performance degrades with sequence length | **Parallel** processing |
-| Sequential processing limits speed | **Direct** connections |
-
-<div style="text-align: right"><font size="4">3</font></div>
+| RNNs/LSTMs struggle with long dependencies | Attention mechanisms |
+| Performance degrades with sequence length | Parallel processing |
+| Sequential processing limits speed | Direct connections |
 
 ---
+
 ### Key Innovations in Transformers
 
 - **Architecture:** Replace RNN with self-attention mechanism
@@ -36,7 +58,149 @@
   - Better handling of long sequences
   - Improved model scalability
 
-<div style="text-align: right"><font size="4">4</font></div>
+<!-- NOTE: Attention Mechanisms-->
+---
+
+## Attention Mechanisms
+
+---
+
+### Attention Mechanisms Overview
+
+Seq2Seq models like RNNs process an entire input sequence before producing output.  
+
+However, **compressing all information into one hidden state** may lead to information loss, especially for long sequences. Moreover, using RNN-based Seq2Seq models for translating word by word can lead to grammatical errors.
+
+<p style="text-align:center;">
+  <img src="figure/16_01.png" alt="" width="600">
+</p>
+
+---
+
+### Why Attention?
+
+Just like humans revisit parts of a sentence while translating, **Attention Mechanism** allows the model to:
+- Access all input elements at each time step
+- Assign different weights to each element
+- Focus on relevant parts
+
+**Example**: To generate "*help*" 
+
+$\rightarrow$ more focus on "*mir, helfen, zu*"
+$\rightarrow$ less focus on "*kannst, du, Satz*"
+
+<p style="text-align:center;">
+  <img src="figure/16_02.png" alt="" width="600">
+</p>
+
+---
+
+### Attention for RNNs
+
+Original paper: **Bahdanau et al., 2014** [*Neural Machine Translation by Jointly Learning to Align and Translate*](https://arxiv.org/abs/1409.0473)
+
+Given input sequence:
+$$
+x = \left(x^{(1)}, x^{(2)}, \ldots, x^{(T)}\right)
+$$
+
+- Attention assigns weight to each input element  
+- Helps identify which parts to focus on
+
+For example, suppose our input is a sentence, and a word with a larger weight contributes more to our understanding of the whole sentence. 
+
+---
+
+### Bidirectional RNN Processing
+
+**Bidirectional RNN** reads input sequence: forward $(1 \to T)$ and backward $(T \to 1)$. Thus, each input $x^{(i)}$ has two hidden states: $h_F^{(i)}$ (forward) and $h_B^{(i)}$ (backward). And we can concatenate them: $h^{(i)} = [h_F^{(i)}, h_B^{(i)}]$ for computation efficiency.
+
+<p style="text-align:center;">
+  <img src="figure/16_03.png" alt="" width="600">
+</p>
+
+---
+
+### Context Vectors
+
+**Context vector $c_i$** is a weighted sum of all hidden states:
+$$
+c_i = \sum_{j=1}^{T} \alpha_{ij} h^{(j)}
+$$
+
+Where $\alpha_{ij}$ is attention weight, and each output has a unique set of $\alpha_{ij}$.
+
+<p style="text-align:center;">
+  <img src="figure/16_03.png" alt="" width="600">
+</p>
+
+---
+
+### Output Generation
+
+At time step $i$, RNN #2 uses:
+- Previous hidden state $s^{(i-1)}$
+- Previous target word $y^{(i-1)}$
+- Context vector $c^{(i)}$
+
+To generate output $o^{(i)}$  
+During **training** $\rightarrow$ feed correct $y^{(i)}$  
+During **inference** $\rightarrow$ feed predicted $o^{(i)}$
+
+<p style="text-align:center;">
+  <img src="figure/16_03.png" alt="" width="600">
+</p>
+
+---
+
+### Computing Attention Weights
+
+Each weight $\alpha_{ij}$ has:
+- $j$: index of input
+- $i$: index of output
+
+**Normalized alignment score**:
+$$
+\alpha_{ij} = \frac{\exp(e_{ij})}{\sum_{k=1}^{T} \exp(e_{ik})}
+$$
+
+➡️ Similar to **Softmax function**  
+➡️ $\sum_{j=1}^{T} \alpha_{ij} = 1$
+
+---
+
+### RNN Attention vs Transformer Attention
+
+**Key difference**:
+
+- **RNN Attention**:
+  - Uses attention + recurrent process (one element at a time)
+
+- **Transformer Attention**:
+  - Uses **only self-attention**
+  - Processes **whole sequence at once**
+  - **No recurrence**
+
+<!-- NOTE: Self-Attention -->
+---
+
+## Self-Attention
+
+<!-- NOTE: Transformer Architecture -->
+---
+
+## Transformer Architecture
+
+<!-- NOTE: Pretraining and Finetuning with Large Models -->
+---
+
+## Pretraining and Finetuning with Large Models
+
+<!-- NOTE: Finetuning BERT in PyTorch (Lecture Code) -->
+---
+
+## Finetuning BERT in PyTorch (Lecture Code)
+
 ---
 ### The Rise of Attention Mechanisms
 - Attention mechanisms originally introduced to improve RNNs.
@@ -45,15 +209,12 @@
 - Major breakthrough: Transformer architecture (Vaswani et al., 2017).
 - "Attention is All You Need" paper introduced self-attention to replace RNNs.
 
-<div style="text-align: right"><font size="4">5</font></div>
 ---
 ### Adding Attention to RNNs
 - Challenge: RNNs suffer from long-range dependencies.
 - Solution: Introduce an attention mechanism to access relevant parts of the input.
 - The model learns to generate context vectors using attention weights.
 - Example: Machine translation and text summarization.
-
-<div style="text-align: right"><font size="4">6</font></div>
 ---
 ### How Attention Works in RNNs??
 - Compute context vector for each output token.
@@ -62,7 +223,6 @@
   - Dot product between current hidden state and encoder states.
   - Softmax function to normalize weights.
 
-<div style="text-align: right"><font size="4">7</font></div>
 ---
 ### Attention Weight Computation
 Given encoder hidden states (h₁, h₂, ..., hₙ) and decoder hidden state (d),
@@ -74,15 +234,12 @@ Context vector:
 
 $c = \sum_{i=1}^{n} \alpha_i \cdot h_i$
 
-<div style="text-align: right"><font size="4">8</font></div>
 ---
 ### Why Use Attention Mechanisms?
 - Allows RNNs to handle longer sequences without losing context.
 - Improves performance in tasks like translation and summarization.
 - Reduces model complexity by focusing on important inputs.
 - Paves the way for the development of the Transformer model.
-
-<div style="text-align: right"><font size="4">9</font></div>
 ---
 ### Self-Attention Mechanism
 
@@ -97,7 +254,7 @@ $c = \sum_{i=1}^{n} \alpha_i \cdot h_i$
 - Row weights sum to 1.0 (probability distribution)
 - Higher values = stronger relationships
 
-<div style="text-align: right"><font size="4">10</font></div>
+
 ---
 ### Key Formula for Self-Attention
 Given query (Q), key (K), and value (V) matrices:
@@ -111,7 +268,6 @@ Where:
 **Why Scaling?**
 - Scaling factor $\sqrt{d_k}$ prevents large dot products.
 
-<div style="text-align: right"><font size="4">11</font></div>
 ---
 ### Self-Attention in Practice
 
@@ -132,7 +288,6 @@ print("Context:", context)
 print("Attention Weights:", weights)
 ```
 
-<div style="text-align: right"><font size="4">12</font></div>
 ---
 ### RNNs vs Transformers Comparison
 
@@ -145,7 +300,6 @@ print("Attention Weights:", weights)
 
 **Takeaway:** Transformers outperform RNNs in efficiency and accuracy.
 
-<div style="text-align: right"><font size="4">13</font></div>
 ---
 ### Multi-Head Self-Attention
 
@@ -164,7 +318,6 @@ print("Attention Weights:", weights)
 </div>
 </div>
 
-<div style="text-align: right"><font size="4">14</font></div>
 ---
 ### How Multi-Head Attention Works
 1. Split the input into multiple attention heads.
@@ -177,8 +330,7 @@ $\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)
 
 - Each head:
 $\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$
-
-<div style="text-align: right"><font size="4">15</font></div>   
+ 
 ---
 ### Self-Attention Numerical Example
 Q = [1 0; 0 1]  
@@ -195,7 +347,6 @@ V = [1 2; 3 4]
 | 1.0     | 0.707   | 0.62     | 1.86           |
 | 0.0     | 0.707   | 0.38     | 2.14           |
 
-<div style="text-align: right"><font size="4">16</font></div>   
 ---
 
 
