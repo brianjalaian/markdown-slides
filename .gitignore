@@ -1,0 +1,15 @@
+# Resource folder (contains textbooks/PDFs - do not commit)
+resource/
+
+# OS files
+.DS_Store
+*/.DS_Store
+
+# Node
+node_modules/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
