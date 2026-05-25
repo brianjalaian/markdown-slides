@@ -123,27 +123,11 @@
         }
     </style>
 
-    <!-- MathJax Configuration -->
-    <script>
-        MathJax = {
-            tex: {
-                inlineMath: [['$', '$']],
-                displayMath: [['$$', '$$']],
-                packages: ['base', 'ams']
-            },
-            svg: {
-                fontCache: 'global'
-            }
-        };
-    </script>
-    <script type="text/javascript" id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-    </script>
 </head>
 <body>
     <div class="reveal">
         <div class="slides">
-            <section data-markdown="slides.md"
+            <section id="slides-section"
                      data-separator="^---$"
                      data-separator-vertical="^--$"
                      data-charset="utf-8">
@@ -154,13 +138,29 @@
         </div>
     </div>
 
+    <script>
+        // Load slides.local.md (with presenter notes) when served from localhost.
+        // slides.md (no notes) is loaded everywhere else — this is what GitHub Pages serves.
+        // Override either way with ?local=1 (force notes) or ?public=1 (force no-notes).
+        const section = document.getElementById('slides-section');
+        const params = new URLSearchParams(window.location.search);
+        const host = window.location.hostname;
+        const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '';
+        const useLocal = params.has('local') || (isLocalhost && !params.has('public'));
+        section.setAttribute('data-markdown', useLocal ? 'slides.local.md' : 'slides.md');
+    </script>
+
     <script src="../reveal.js/dist/reveal.js"></script>
     <script src="../reveal.js/plugin/markdown/markdown.js"></script>
     <script src="../reveal.js/plugin/highlight/highlight.js"></script>
     <script src="../reveal.js/plugin/math/math.js"></script>
+    <script src="../reveal.js/plugin/notes/notes.js"></script>
     <script>
         Reveal.initialize({
-            plugins: [ RevealMarkdown, RevealHighlight, RevealMath.MathJax3 ],
+            plugins: [ RevealMarkdown, RevealHighlight, RevealMath.MathJax3, RevealNotes ],
+            width: 1280,
+            height: 900,
+            margin: 0.03,
             markdown: {
                 separator: '^---$',
                 separatorVertical: '^--$',
