@@ -49,11 +49,11 @@ With $n = 11$ classifiers, the ensemble error drops dramatically:
 | Base Error ($\epsilon$) | Ensemble Error |
 |:----------:|:---------------------:|
 | 0.25 | **0.034** |
-| 0.35 | 0.133 |
-| 0.45 | 0.417 |
+| 0.35 | 0.149 |
+| 0.45 | 0.367 |
 | 0.50 | 0.500 |
 
-**Key:** Ensembles only help when base error < 0.5
+**Under the assumptions on the previous slide:** majority voting improves on the base error when $\epsilon < 0.5$
 
 <div style="text-align: right"><font size="4">5</font></div>
 
@@ -107,20 +107,20 @@ $h_j$ — $j$-th classifier &nbsp;|&nbsp; $w_j \geq 0,\ \sum_j w_j = 1$ — clas
 <div style="text-align: right"><font size="4">8</font></div>
 
 ---
-### When Does Soft Voting Beat Hard?
+### When Can Soft Voting Beat Hard?
 
-**Result (Kittler, Hatef, Duin & Matas 1998):** if base classifiers output conditionally-independent, well-calibrated posteriors $p_j(c \mid \mathbf{x})$, the weighted-average soft vote converges to the Bayes-optimal classifier as $m \to \infty$.
+**Core advantage:** soft voting preserves confidence information that hard voting discards—but that information is useful only when the probability estimates are reliable.
 
 | Assumption | Hard voting | Soft voting |
 |:--|:--:|:--:|
-| Calibrated posteriors required | not used | required for optimality |
+| Calibrated posteriors required | not used | important |
 | Confidence preserved | discarded | averaged |
 | Robust to a single over-confident bad classifier | yes | no — one bad probability can swing the average |
 | Works when base outputs only labels | yes | n/a |
 
-**Practical rule:** calibrate base learners (e.g. Platt scaling, isotonic regression), then prefer soft voting. Fall back to hard voting when posteriors are unreliable.
+**Practical rule:** compare both by cross-validation. Prefer soft voting when probabilities are well calibrated; use hard voting when only labels are available or probability estimates are unreliable.
 
-<div style="position: absolute; bottom: 10px; left: 20px; font-size: 0.45em; color: #888;">Kittler, Hatef, Duin & Matas (1998), On Combining Classifiers, IEEE TPAMI 20(3)</div>
+<div style="position: absolute; bottom: 10px; left: 20px; font-size: 0.45em; color: #888;">Raschka & Mirjalili, Ch. 7; Kittler et al. (1998), On Combining Classifiers</div>
 <div style="text-align: right"><font size="4">9</font></div>
 
 ---
@@ -426,7 +426,7 @@ The engineering layer (parallel histograms, sparsity-aware splits, cache-friendl
 ### Summary
 
 - Ensembles outperform single models by combining classifiers whose errors are weakly correlated.
-- **Majority voting** is the simplest aggregator; *soft voting* is Bayes-optimal under independence and calibration (Kittler et al. 1998).
+- **Majority voting** is the simplest aggregator; *soft voting* averages calibrated posteriors — Kittler et al.'s (1998) *sum rule*, a robust approximation to the Bayes-optimal combination rather than a guaranteed win (cf. slide 9).
 - **Bagging** reduces variance: $\operatorname{Var}_{\text{ensemble}} = \rho\sigma^2 + (1-\rho)\sigma^2/M$. Decorrelation drives the gain.
 - **AdaBoost** is forward-stagewise minimization of exponential loss — $\alpha$ and weight updates fall out of the derivation (Friedman, Hastie & Tibshirani 2000).
 - **Gradient Boosting** generalizes this to any differentiable loss via functional gradient descent (Friedman 2001).
