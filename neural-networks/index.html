@@ -58,6 +58,36 @@
     .three-cards b,.three-cards span,.three-cards i { display:block; }
     .three-cards span { font-size:.72em; margin:8px 0; }
     .three-cards i { color:var(--muted); font-size:.58em; }
+    /* Compact shape strip: the tensor shapes a forward/backward pass moves
+       through, so the equations have a picture to hang on. */
+    .flow-row.shapes { gap:10px; margin:.7em auto; }
+    .flow-row.shapes .flow-box { min-width:112px; padding:10px 8px; border-radius:10px; font-size:.74em; }
+    .flow-row.shapes .flow-box b { color:#f8f8f2; }
+    .flow-row.shapes .flow-box small { margin-top:4px; color:var(--orange); }
+    .flow-row.shapes .arrow { font-size:.95em; }
+    .reveal .fragment.eq { margin:.35em auto; }
+    /* Bar groups: logits vs probabilities, raw vs standardized features. */
+    .bar-pair { display:flex; justify-content:center; gap:54px; margin:.7em auto; align-items:flex-end; }
+    .bar-group { text-align:center; }
+    .bar-group > b { display:block; color:var(--muted); font-size:.62em; margin-bottom:8px; font-weight:normal; }
+    .barset { display:flex; align-items:flex-end; justify-content:center; gap:9px; height:132px; }
+    .barset .bar { width:40px; border-radius:5px 5px 0 0; position:relative; background:rgba(139,233,253,.30); border:1px solid var(--cyan); }
+    .barset .bar.hi { background:rgba(80,250,123,.38); border-color:var(--green); }
+    .barset .bar.lo { background:rgba(189,147,249,.22); border-color:var(--purple); }
+    .barset .bar em { position:absolute; top:-21px; left:0; right:0; font-size:.5em; color:#f8f8f2; font-style:normal; }
+    .barset .bar i  { position:absolute; bottom:-20px; left:0; right:0; font-size:.46em; color:var(--muted); font-style:normal; }
+    .axis-zero { border-top:1px solid rgba(255,255,255,.22); width:88%; margin:26px auto 0; }
+    /* Side-by-side comparison cards (analytic vs numerical, train vs inference). */
+    .compare2 { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin:.9em auto; width:92%; }
+    .compare2 > div { padding:15px 14px; border:2px solid var(--cyan); border-radius:12px; background:rgba(139,233,253,.07); }
+    .compare2 > div.alt { border-color:var(--purple); background:rgba(189,147,249,.08); }
+    .compare2 b { display:block; color:var(--orange); margin-bottom:7px; font-size:.82em; }
+    .compare2 small { color:var(--muted); font-size:.62em; display:block; margin-top:7px; }
+    /* Inline SVG sketches (activation shapes, loss surface). */
+    .sketch { display:flex; justify-content:center; gap:26px; margin:.7em auto; }
+    .sketch figure { margin:0; text-align:center; }
+    .sketch figcaption { color:var(--muted); font-size:.56em; margin-top:4px; }
+    .sketch svg { background:rgba(255,255,255,.03); border-radius:9px; }
     .refs { font-size:.69em; text-align:left; }
     .refs li { margin-bottom:.45em; }
     .reveal code { color:#f8f8f2; }

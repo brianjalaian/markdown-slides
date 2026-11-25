@@ -97,19 +97,25 @@ Depth composes learned representations; width controls capacity within a layer.
 ---
 ## Forward Pass — Matrix Form
 
-$$\underbrace{\mathbf{Z}^{(1)}}\_{(B,H)}=
-\underbrace{\mathbf{X}}\_{(B,D)}
-\underbrace{\mathbf{W}^{(1)}}\_{(D,H)}+
-\underbrace{\mathbf{b}^{(1)}}\_{(H,)}$$
+<div class="flow-row shapes">
+  <div class="flow-box"><b>X</b><small>(B, D)</small></div>
+  <span class="arrow">→</span>
+  <div class="flow-box accent"><b>Z<sup>(1)</sup></b><small>(B, H)</small></div>
+  <span class="arrow">→</span>
+  <div class="flow-box accent"><b>A<sup>(1)</sup></b><small>(B, H)</small></div>
+  <span class="arrow">→</span>
+  <div class="flow-box green"><b>Z<sup>(2)</sup></b><small>(B, K)</small></div>
+  <span class="arrow">→</span>
+  <div class="flow-box green"><b>P</b><small>(B, K)</small></div>
+</div>
 
-$$\underbrace{\mathbf{A}^{(1)}}\_{(B,H)}=\phi\!\left(\underbrace{\mathbf{Z}^{(1)}}\_{(B,H)}\right)$$
+<div class="fragment eq">$$\underbrace{\mathbf{Z}^{(1)}}_{(B,H)}= \underbrace{\mathbf{X}}_{(B,D)} \underbrace{\mathbf{W}^{(1)}}_{(D,H)}+ \underbrace{\mathbf{b}^{(1)}}_{(H,)}$$</div>
 
-$$\underbrace{\mathbf{Z}^{(2)}}\_{(B,K)}=
-\underbrace{\mathbf{A}^{(1)}}\_{(B,H)}
-\underbrace{\mathbf{W}^{(2)}}\_{(H,K)}+
-\underbrace{\mathbf{b}^{(2)}}\_{(K,)}$$
+<div class="fragment eq">$$\underbrace{\mathbf{A}^{(1)}}_{(B,H)}=\phi\!\left(\underbrace{\mathbf{Z}^{(1)}}_{(B,H)}\right)$$</div>
 
-$$\underbrace{\mathbf{P}}\_{(B,K)}=\operatorname{softmax}\!\left(\underbrace{\mathbf{Z}^{(2)}}\_{(B,K)}\right)$$
+<div class="fragment eq">$$\underbrace{\mathbf{Z}^{(2)}}_{(B,K)}= \underbrace{\mathbf{A}^{(1)}}_{(B,H)} \underbrace{\mathbf{W}^{(2)}}_{(H,K)}+ \underbrace{\mathbf{b}^{(2)}}_{(K,)}$$</div>
+
+<div class="fragment eq">$$\underbrace{\mathbf{P}}_{(B,K)}=\operatorname{softmax}\!\left(\underbrace{\mathbf{Z}^{(2)}}_{(B,K)}\right)$$</div>
 
 <div class="source">Raschka & Mirjalili (2022), §11</div>
 <div class="slide-no">7</div>
@@ -117,12 +123,35 @@ $$\underbrace{\mathbf{P}}\_{(B,K)}=\operatorname{softmax}\!\left(\underbrace{\ma
 ---
 ## Choosing an Activation
 
-| Activation | Formula | Strength | Failure mode |
-|:--|:--|:--|:--|
-| Sigmoid | $\sigma(z)=1/(1+e^{-z})$ | probabilistic gate | saturates; not zero-centered |
-| Tanh | $\tanh(z)$ | zero-centered | saturates for large $|z|$ |
-| ReLU | $\max(0,z)$ | cheap; strong gradients for $z>0$ | inactive “dead” units |
-| GELU | $z\,\Phi(z)$ | smooth gate; common in Transformers | more computation |
+<div class="sketch">
+  <figure><svg width="150" height="92" viewBox="0 0 150 92">
+      <line x1="8" y1="46" x2="142" y2="46" stroke="#5a6080" stroke-width="1"/>
+      <line x1="75" y1="6" x2="75" y2="86" stroke="#5a6080" stroke-width="1"/>
+      <path d="M10,82 C45,82 60,10 140,10" fill="none" stroke="#8be9fd" stroke-width="2.4"/>
+    </svg><figcaption>sigmoid — saturates both ends</figcaption></figure>
+  <figure><svg width="150" height="92" viewBox="0 0 150 92">
+      <line x1="8" y1="46" x2="142" y2="46" stroke="#5a6080" stroke-width="1"/>
+      <line x1="75" y1="6" x2="75" y2="86" stroke="#5a6080" stroke-width="1"/>
+      <path d="M10,84 C45,84 60,8 140,8" fill="none" stroke="#8be9fd" stroke-width="2.4"/>
+    </svg><figcaption>tanh — zero-centred</figcaption></figure>
+  <figure><svg width="150" height="92" viewBox="0 0 150 92">
+      <line x1="8" y1="46" x2="142" y2="46" stroke="#5a6080" stroke-width="1"/>
+      <line x1="75" y1="6" x2="75" y2="86" stroke="#5a6080" stroke-width="1"/>
+      <path d="M10,46 L75,46 L140,10" fill="none" stroke="#8be9fd" stroke-width="2.4"/>
+    </svg><figcaption>ReLU — no positive saturation</figcaption></figure>
+  <figure><svg width="150" height="92" viewBox="0 0 150 92">
+      <line x1="8" y1="46" x2="142" y2="46" stroke="#5a6080" stroke-width="1"/>
+      <line x1="75" y1="6" x2="75" y2="86" stroke="#5a6080" stroke-width="1"/>
+      <path d="M10,48 C50,52 62,40 140,10" fill="none" stroke="#8be9fd" stroke-width="2.4"/>
+    </svg><figcaption>GELU — smooth gate</figcaption></figure>
+</div>
+
+| Activation | Strength | Failure mode |
+|:--|:--|:--|
+| Sigmoid | probabilistic gate | saturates; not zero-centered |
+| Tanh | zero-centered | saturates for large $\lvert z\rvert$ |
+| ReLU | cheap; strong gradients for $z>0$ | inactive “dead” units |
+| GELU | smooth gate; common in Transformers | more computation |
 
 **Default for an introductory MLP:** ReLU hidden units; task-specific output activation.
 
@@ -132,16 +161,26 @@ $$\underbrace{\mathbf{P}}\_{(B,K)}=\operatorname{softmax}\!\left(\underbrace{\ma
 ---
 ## From Logits to Probabilities
 
-For each example $i$, stabilize softmax by subtracting the row maximum:
+<div class="bar-pair">
+  <div class="bar-group"><b>logits z (unbounded)</b>
+    <div class="barset">
+      <div class="bar" style="height:108px"><em>2.0</em><i>cat</i></div>
+      <div class="bar" style="height:62px"><em>1.0</em><i>dog</i></div>
+      <div class="bar" style="height:22px"><em>0.1</em><i>bird</i></div>
+    </div>
+  </div>
+  <div class="bar-group"><b>probabilities p (sum to 1)</b>
+    <div class="barset">
+      <div class="bar hi" style="height:86px"><em>.66</em><i>cat</i></div>
+      <div class="bar lo" style="height:31px"><em>.24</em><i>dog</i></div>
+      <div class="bar lo" style="height:13px"><em>.10</em><i>bird</i></div>
+    </div>
+  </div>
+</div>
 
-$$p\_{ik}=\frac{\exp(z\_{ik}-m\_i)}{\sum\_{j=1}^{K}\exp(z\_{ij}-m\_i)},
-\qquad m\_i=\max\_j z\_{ij}$$
+<div class="fragment eq">$$p_{ik}=\frac{\exp(z_{ik}-m_i)}{\sum_{j=1}^{K}\exp(z_{ij}-m_i)},\qquad m_i=\max_j z_{ij}$$</div>
 
-Cross-entropy for one-hot targets:
-
-$$\mathcal{L}=-\frac{1}{B}\sum\_{i=1}^{B}\sum\_{k=1}^{K}y\_{ik}\log(p\_{ik}+\varepsilon)$$
-
-<div class="key">Softmax is invariant to adding the same constant to every logit, so subtracting $m\_i$ prevents overflow without changing $\mathbf{P}$.</div>
+<div class="fragment eq">$$\mathcal{L}=-\frac{1}{B}\sum_{i=1}^{B}\sum_{k=1}^{K}y_{ik}\log(p_{ik}+\varepsilon)$$</div>
 
 <div class="source">Goodfellow, Bengio & Courville (2016), §§6.2, 6.3</div>
 <div class="slide-no">9</div>
@@ -169,8 +208,8 @@ $$\mathcal{L}=-\frac{1}{B}\sum\_{i=1}^{B}\sum\_{k=1}^{K}y\_{ik}\log(p\_{ik}+\var
 <div class="loop">
   <div>① Forward<br><small>$\mathbf{X}\rightarrow\mathbf{P}$</small></div>
   <div>② Loss<br><small>$\mathcal{L}(\mathbf{P},\mathbf{Y})$</small></div>
-  <div>③ Backward<br><small>$\nabla\_{\theta}\mathcal{L}$</small></div>
-  <div>④ Update<br><small>$\theta\leftarrow\theta-\eta\nabla\_{\theta}\mathcal{L}$</small></div>
+  <div>③ Backward<br><small>$\nabla_{\theta}\mathcal{L}$</small></div>
+  <div>④ Update<br><small>$\theta\leftarrow\theta-\eta\nabla_{\theta}\mathcal{L}$</small></div>
 </div>
 
 Repeat over mini-batches until validation performance stops improving.
@@ -206,19 +245,18 @@ At each node, the backward pass receives an **upstream gradient**, multiplies by
 ---
 ## Softmax + Cross-Entropy Simplifies
 
-For averaged cross-entropy, the derivative with respect to logits is:
+<div class="fragment eq">$$\underbrace{\mathbf{G}^{(2)}}_{(B,K)}=\frac{\partial\mathcal{L}}{\partial\mathbf{Z}^{(2)}}=\frac{1}{B}\left(\underbrace{\mathbf{P}}_{(B,K)}-\underbrace{\mathbf{Y}}_{(B,K)}\right)$$</div>
 
-$$\underbrace{\mathbf{G}^{(2)}}\_{(B,K)}
-=\frac{\partial\mathcal{L}}{\partial\mathbf{Z}^{(2)}}
-=\frac{1}{B}\left(
-\underbrace{\mathbf{P}}\_{(B,K)}-
-\underbrace{\mathbf{Y}}\_{(B,K)}\right)$$
+<div class="compare2 fragment">
+  <div><b>True class &nbsp;·&nbsp; p − 1 &lt; 0</b>
+    gradient descent <strong>raises</strong> this logit
+    <small>confidence was short of 1, so push it up</small></div>
+  <div class="alt"><b>Every other class &nbsp;·&nbsp; p &gt; 0</b>
+    gradient descent <strong>lowers</strong> this logit
+    <small>any mass here is mass in the wrong place</small></div>
+</div>
 
-For the true class: $p\_{ik}-1$ &nbsp; → &nbsp; increase its logit.
-
-For every other class: $p\_{ik}$ &nbsp; → &nbsp; decrease its logit.
-
-<div class="key">This compact error signal is why the softmax–cross-entropy pair is both mathematically clean and numerically practical.</div>
+<div class="key">One subtraction is the entire error signal — this is why the softmax–cross-entropy pair is both clean to differentiate and stable to compute.</div>
 
 <div class="source">Goodfellow, Bengio & Courville (2016), §6.2.2</div>
 <div class="slide-no">13</div>
@@ -226,21 +264,23 @@ For every other class: $p\_{ik}$ &nbsp; → &nbsp; decrease its logit.
 ---
 ## Backpropagation — Matrix Form
 
-$$\underbrace{\nabla\_{\mathbf{W}^{(2)}}\mathcal{L}}\_{(H,K)}=
-\underbrace{\mathbf{A}^{(1)\top}}\_{(H,B)}
-\underbrace{\mathbf{G}^{(2)}}\_{(B,K)}$$
+<div class="flow-row shapes">
+  <div class="flow-box green"><b>G<sup>(2)</sup></b><small>(B, K)</small></div>
+  <span class="arrow">→</span>
+  <div class="flow-box green"><b>∇W<sup>(2)</sup></b><small>(H, K)</small></div>
+  <span class="arrow">→</span>
+  <div class="flow-box accent"><b>G<sup>(1)</sup></b><small>(B, H)</small></div>
+  <span class="arrow">→</span>
+  <div class="flow-box"><b>∇W<sup>(1)</sup></b><small>(D, H)</small></div>
+</div>
 
-$$\underbrace{\mathbf{G}^{(1)}}\_{(B,H)}=
-\left(
-\underbrace{\mathbf{G}^{(2)}}\_{(B,K)}
-\underbrace{\mathbf{W}^{(2)\top}}\_{(K,H)}
-\right)\odot\phi'\!\left(\underbrace{\mathbf{Z}^{(1)}}\_{(B,H)}\right)$$
+<div class="fragment eq">$$\underbrace{\nabla_{\mathbf{W}^{(2)}}\mathcal{L}}_{(H,K)}=\underbrace{\mathbf{A}^{(1)\top}}_{(H,B)}\underbrace{\mathbf{G}^{(2)}}_{(B,K)}$$</div>
 
-$$\underbrace{\nabla\_{\mathbf{W}^{(1)}}\mathcal{L}}\_{(D,H)}=
-\underbrace{\mathbf{X}^{\top}}\_{(D,B)}
-\underbrace{\mathbf{G}^{(1)}}\_{(B,H)}$$
+<div class="fragment eq">$$\underbrace{\mathbf{G}^{(1)}}_{(B,H)}=\left(\underbrace{\mathbf{G}^{(2)}}_{(B,K)}\underbrace{\mathbf{W}^{(2)\top}}_{(K,H)}\right)\odot\phi'\!\left(\underbrace{\mathbf{Z}^{(1)}}_{(B,H)}\right)$$</div>
 
-Bias gradients sum each $\mathbf{G}$ over the batch axis.
+<div class="fragment eq">$$\underbrace{\nabla_{\mathbf{W}^{(1)}}\mathcal{L}}_{(D,H)}=\underbrace{\mathbf{X}^{\top}}_{(D,B)}\underbrace{\mathbf{G}^{(1)}}_{(B,H)}$$</div>
+
+<div class="fragment"><small>Bias gradients sum each $\mathbf{G}$ over the batch axis.</small></div>
 
 <div class="source">Raschka & Mirjalili (2022), §11</div>
 <div class="slide-no">14</div>
@@ -268,17 +308,20 @@ Gradient descent subtracts this matrix:
 ---
 ## Gradient Checking
 
-For parameter $\theta\_j$, compare backpropagation with a centered finite difference:
+<div class="compare2">
+  <div><b>Analytic &nbsp;·&nbsp; backpropagation</b>
+    one backward pass, all parameters at once
+    <small>fast — what training actually uses</small></div>
+  <div class="alt"><b>Numerical &nbsp;·&nbsp; finite difference</b>
+    two loss evaluations <em>per parameter</em>
+    <small>slow — a debugging check, never a training method</small></div>
+</div>
 
-$$g\_j^{\text{num}}=\frac{\mathcal{L}(\theta\_j+\epsilon)-\mathcal{L}(\theta\_j-\epsilon)}{2\epsilon}$$
+<div class="fragment eq">$$g_j^{\text{num}}=\frac{\mathcal{L}(\theta_j+\epsilon)-\mathcal{L}(\theta_j-\epsilon)}{2\epsilon}$$</div>
 
-$$\text{relative error}=
-\frac{\left\lVert\mathbf{g}^{\text{ana}}-\mathbf{g}^{\text{num}}\right\rVert\_2}
-{\left\lVert\mathbf{g}^{\text{ana}}\right\rVert\_2+\left\lVert\mathbf{g}^{\text{num}}\right\rVert\_2+10^{-12}}$$
+<div class="fragment eq">$$\text{relative error}=\frac{\left\lVert\mathbf{g}^{\text{ana}}-\mathbf{g}^{\text{num}}\right\rVert_2}{\left\lVert\mathbf{g}^{\text{ana}}\right\rVert_2+\left\lVert\mathbf{g}^{\text{num}}\right\rVert_2+10^{-12}}$$</div>
 
-- use double precision and a tiny network
-- avoid nondifferentiable ReLU points
-- check before long training runs
+<div class="key fragment">Double precision, a tiny network, and stay off ReLU kinks — then run it before any long training job.</div>
 
 <div class="source">Goodfellow, Bengio & Courville (2016), §8.6</div>
 <div class="slide-no">16</div>
@@ -339,21 +382,28 @@ All-zero weights are invalid: identical hidden units receive identical gradients
 ---
 ## Normalize Inputs; Sometimes Normalize Layers
 
-**Input standardization**
+<div class="bar-pair">
+  <div class="bar-group"><b>raw features — wildly different scales</b>
+    <div class="barset">
+      <div class="bar" style="height:14px"><i>age</i></div>
+      <div class="bar" style="height:124px"><i>income</i></div>
+      <div class="bar" style="height:30px"><i>visits</i></div>
+    </div>
+  </div>
+  <div class="bar-group"><b>standardized — comparable, zero-centred</b>
+    <div class="barset">
+      <div class="bar hi" style="height:58px"><i>age</i></div>
+      <div class="bar hi" style="height:70px"><i>income</i></div>
+      <div class="bar hi" style="height:62px"><i>visits</i></div>
+    </div>
+  </div>
+</div>
 
-$$x'\_d=\frac{x\_d-\mu\_d}{\sigma\_d+\epsilon}$$
+<div class="fragment eq">$$x'_d=\frac{x_d-\mu_d}{\sigma_d+\epsilon}\qquad\text{(inputs, once)}$$</div>
 
-puts features on comparable scales and improves conditioning.
+<div class="fragment eq">$$\hat z=\frac{z-\mu_{\mathcal{B}}}{\sqrt{\sigma^2_{\mathcal{B}}+\epsilon}},\qquad y=\gamma\hat z+\beta\qquad\text{(batch norm, inside)}$$</div>
 
-**Batch normalization** (inside a network)
-
-$$\hat z=\frac{z-\mu\_{\mathcal{B}}}{\sqrt{\sigma^2\_{\mathcal{B}}+\epsilon}},\qquad y=\gamma\hat z+\beta$$
-
-uses batch statistics during training and running statistics at inference.
-
-Modern view: it often makes optimization smoother and more stable; the original “internal covariate shift” explanation is not considered complete.
-
-<div class="key">These solve related but different problems; batch normalization does not replace preprocessing.</div>
+<div class="key fragment">Related problems, not the same one — batch normalization does not replace input preprocessing. Modern view: it smooths optimization; “internal covariate shift” is not the full story.</div>
 
 <div class="source">Ioffe & Szegedy (2015); Santurkar et al. (2018)</div>
 <div class="slide-no">20</div>
