@@ -21,6 +21,10 @@
     .reveal th,.reveal td { padding:8px 10px; border:1px solid rgba(255,255,255,.18); line-height:1.2; }
     .source { position:absolute; bottom:8px; left:18px; color:#8991a8; font-size:.42em; }
     .slide-no { position:absolute; bottom:8px; right:18px; color:#8991a8; font-size:.55em; }
+    /* .source and .slide-no are absolutely positioned, so they float over any
+       content that reaches the bottom of the slide. Reserve a footnote band so
+       the last line can never collide with the attribution. */
+    .reveal .slides section { padding-bottom: 52px; }
     .flow-row { display:flex; align-items:center; justify-content:center; gap:18px; margin:1.1em auto; }
     .flow-row.compact { margin:.8em auto; }
     .flow-box { min-width:190px; padding:18px 16px; border:2px solid var(--cyan); border-radius:12px; background:rgba(139,233,253,.08); }
